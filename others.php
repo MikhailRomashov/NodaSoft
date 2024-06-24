@@ -12,9 +12,17 @@ class Contractor
     public $type;
     public $name;
 
+    public function __construct(int $id, int $type = self::TYPE_CUSTOMER, string $name = "")
+    {
+        $this->id = $id;
+        $this->type = $type;
+        $this->name = $name;
+    }
+
     public static function getById(int $resellerId): self
     {
-        return new self($resellerId); // fakes the getById method
+        // In real scenario, fetch data from database and create an instance
+        return new self($resellerId);
     }
 
     public function getFullName(): string
@@ -33,17 +41,18 @@ class Employee extends Contractor
 
 class Status
 {
-    public $id, $name;
+    public $id;
+    public $name;
 
     public static function getName(int $id): string
     {
-        $a = [
+        $statuses = [
             0 => 'Completed',
             1 => 'Pending',
             2 => 'Rejected',
         ];
 
-        return $a[$id];
+        return $statuses[$id] ?? 'Unknown status';
     }
 }
 
@@ -53,7 +62,8 @@ abstract class ReferencesOperation
 
     public function getRequest($pName)
     {
-        return $_REQUEST[$pName];
+        // Ensure the parameter is safe
+        return htmlspecialchars($_REQUEST[$pName] ?? '');
     }
 }
 
@@ -64,8 +74,8 @@ function getResellerEmailFrom()
 
 function getEmailsByPermit($resellerId, $event)
 {
-    // fakes the method
-    return ['someemeil@example.com', 'someemeil2@example.com'];
+    // In real scenario, fetch emails from database based on resellerId and event
+    return ['someemail@example.com', 'someemail2@example.com'];
 }
 
 class NotificationEvents
